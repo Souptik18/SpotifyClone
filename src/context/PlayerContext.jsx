@@ -73,9 +73,9 @@ const PlayerContextProvider = (props) => {
         setPlayStatus(true);
     }
 
-    const seekSong = async (e) => {
-        audioRef.current.currentTime = ((e.nativeEvent.offsetX / seekBg.current.offsetWidth) * audioRef.current.duration);
-    };
+    function seekSong(e) {
+        audioRef.current.currentTime = (e.nativeEvent.offsetX / seekBg.current.offsetWidth) * audioRef.current.duration;
+    }
 
     useEffect(() => {
         const audioEl = audioRef.current;
