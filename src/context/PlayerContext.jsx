@@ -11,6 +11,14 @@ const PlayerContextProvider = (props) => {
     
     const [track, setTrack] = useState(songsData[0]);
     const [playStatus, setPlayStatus] = useState(false)
+    const [volume, setVolumeState] = useState(0.1);
+
+    const setVolume = (vol) => {
+        setVolumeState(vol);
+        if (audioRef.current) {
+            audioRef.current.volume = vol;
+        }
+    };
     const [time, setTime] = useState({
         currentTime: {
             second: 0,
@@ -24,7 +32,7 @@ const PlayerContextProvider = (props) => {
 
     const play = () => {
         audioRef.current.play();
-        audioRef.current.volume = 0.1;
+        audioRef.current.volume = volume;
         setPlayStatus(true);
     }
 
@@ -57,16 +65,22 @@ const PlayerContextProvider = (props) => {
         setPlayStatus(true);
     }
 
-    const seekSong = async (e) => {
+      const seekSong = async (e) => {
         audioRef.current.currentTime = ((e.nativeEvent.offsetX / seekBg.current.offsetWidth) * audioRef.current.duration);
-    };
+      };
 
-    useEffect(() => {
-        setTimeout(() => {
-            audioRef.current.ontimeupdate = (e) => {
-                seekBar.current.style.width = (Math.floor(audioRef.current.currentTime * 100 / audioRef.current.duration)) + "%";
-                setTime({
-                    currentTime: {
+      useEffect(() => {
+          if (audioRef.current) {
+              audioRef.current.volume = volume;
+          }
+      }, [volume]);
+
+      useEffect(() => {
+          setTimeout(() => {
+              audioRef.current.ontimeupdate = (e) => {
+                  seekBar.current.style.width = (Math.floor(audioRef.current.currentTime * 100 / audioRef.current.duration)) + "%";
+                  setTime({
+                      currentTime: {
                         second: Math.floor(audioRef.current.currentTime % 60),
                         minute: Math.floor(audioRef.current.currentTime / 60)
                     },
@@ -80,7 +94,22 @@ const PlayerContextProvider = (props) => {
     }, [audioRef])
 
     const contextValue = {
-        audioRef, track, setTrack, playStatus, setPlayStatus, next, previous, play, pause, playWithId, seekBar, seekBg, seekSong, time
+        audioRef,
+        track,
+        setTrack,
+        playStatus,
+        setPlayStatus,
+        next,
+        previous,
+        play,
+        pause,
+        playWithId,
+        seekBar,
+        seekBg,
+        seekSong,
+        time,
+        volume,
+        setVolume,
     }
 
     return (

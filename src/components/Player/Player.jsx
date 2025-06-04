@@ -4,7 +4,11 @@ import { PlayerContext } from '../../context/PlayerContext'
 
 const Player = () => {
 
-    const { track, playStatus, play, pause, previous, next, seekBar, seekBg, seekSong, time } = useContext(PlayerContext);
+    const { track, playStatus, play, pause, previous, next, seekBar, seekBg, seekSong, time, volume, setVolume } = useContext(PlayerContext);
+
+    const handlePlays = () => console.log('plays icon');
+    const handleMic = () => console.log('mic icon');
+    const handleQueue = () => console.log('queue icon');
 
     return (
         <div className='h-[10%] bg-black flex justify-between items-center text-white px-4'>
@@ -35,14 +39,20 @@ const Player = () => {
                 </div>
             </div>
             <div className='hidden items-center gap-2 opacity-75 lg:flex'>
-                <img className='w-4' src={assets.plays_icon} alt="" />
-                <img className='w-4' src={assets.mic_icon} alt="" />
-                <img className='w-4' src={assets.queue_icon} alt="" />
+                <img className='w-4 cursor-pointer' onClick={handlePlays} src={assets.plays_icon} alt='' />
+                <img className='w-4 cursor-pointer' onClick={handleMic} src={assets.mic_icon} alt='' />
+                <img className='w-4 cursor-pointer' onClick={handleQueue} src={assets.queue_icon} alt='' />
                 <img className='w-4' src={assets.speaker_icon} alt="" />
                 <img className='w-4' src={assets.volume_icon} alt="" />
-                <div className='w-20 bg-slate-50'>
-                    <hr className='h-1 bg-slate-50 rounded' />
-                </div>
+                <input
+                    className='w-20'
+                    type='range'
+                    min='0'
+                    max='1'
+                    step='0.01'
+                    value={volume}
+                    onChange={(e) => setVolume(parseFloat(e.target.value))}
+                />
                 <img className='w-4' src={assets.mini_player_icon} alt="" />
                 <img className='w-4' src={assets.zoom_icon} alt="" />
             </div>
