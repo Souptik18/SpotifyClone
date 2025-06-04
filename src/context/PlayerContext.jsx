@@ -95,8 +95,12 @@ const PlayerContextProvider = (props) => {
             })
         };
 
-        audioEl.ontimeupdate = handleTimeUpdate;
+        const timeoutId = setTimeout(() => {
+            audioEl.ontimeupdate = handleTimeUpdate;
+        }, 1000);
+
         return () => {
+            clearTimeout(timeoutId);
             audioEl.ontimeupdate = null;
         };
     }, [])
