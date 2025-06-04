@@ -1,4 +1,5 @@
-import React from 'react'
+
+/* eslint-disable react/prop-types */
 import { useNavigate } from 'react-router-dom'
 
 const AlbumItem = ({ image, name, desc, id }) => {
@@ -15,3 +16,4 @@ const AlbumItem = ({ image, name, desc, id }) => {
 }
 
 export default AlbumItem
+

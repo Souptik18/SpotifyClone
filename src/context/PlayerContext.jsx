@@ -1,5 +1,7 @@
+/* eslint-disable react/prop-types */
 import { createContext, useEffect, useRef, useState } from "react";
-import { songsData } from "../assets/assets";
+import { fetchSongs } from "../utils/api";
+import { withAssets } from "../utils/assetHelper";
 
 export const PlayerContext = createContext();
 
@@ -8,8 +10,9 @@ const PlayerContextProvider = (props) => {
     const audioRef = useRef();
     const seekBg = useRef();
     const seekBar = useRef();
-    
-    const [track, setTrack] = useState(songsData[0]);
+
+    const [songs, setSongs] = useState([]);
+    const [track, setTrack] = useState(null);
     const [playStatus, setPlayStatus] = useState(false)
     const [isShuffling, setIsShuffling] = useState(false);
     const [isLooping, setIsLooping] = useState(false);
@@ -23,6 +26,14 @@ const PlayerContextProvider = (props) => {
             minute: 0
         }
     })
+
+    useEffect(() => {
+        fetchSongs().then(data => {
+            const list = withAssets(data);
+            setSongs(list);
+            setTrack(list[0]);
+        });
+    }, []);
 
     const play = () => {
         audioRef.current.play();
@@ -50,25 +61,27 @@ const PlayerContextProvider = (props) => {
     }
 
     const previous = async () => {
+        if (!track) return;
         if (track.id > 0) {
-            console.log("prev", track.id);
-            await setTrack(songsData[track.id - 1]);
+            await setTrack(songs[track.id - 1]);
             await audioRef.current.play();
             setPlayStatus(true);
         }
     }
 
     const next = async () => {
-        if (track.id < songsData.length - 1) {
-            console.log("next", track.id);
-            await setTrack(songsData[track.id + 1]);
+        if (!track) return;
+        if (track.id < songs.length - 1) {
+            await setTrack(songs[track.id + 1]);
             await audioRef.current.play();
             setPlayStatus(true);
         }
     }
 
     const playWithId = async (id) => {
-        await setTrack(songsData[id]);
+        const song = songs.find(s => s.id === id);
+        if (!song) return;
+        await setTrack(song);
         await audioRef.current.play();
         setPlayStatus(true);
     }
@@ -134,3 +147,5 @@ const PlayerContextProvider = (props) => {
 }
 
 export default PlayerContextProvider;
+
+

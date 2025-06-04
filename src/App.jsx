@@ -1,4 +1,3 @@
-import React from 'react'
 import Sidebar from './components/Sidebar/Sidebar'
 import Player from './components/Player/Player'
 import Display from './components/Display/Display'

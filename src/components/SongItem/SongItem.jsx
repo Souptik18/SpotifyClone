@@ -1,4 +1,5 @@
-import React, { useContext } from 'react'
+/* eslint-disable react/prop-types */
+import { useContext } from 'react'
 import { PlayerContext } from '../../context/PlayerContext'
 
 const SongItem = ({ name, image, desc, id }) => {
@@ -15,3 +16,4 @@ const SongItem = ({ name, image, desc, id }) => {
 }
 
 export default SongItem
+
