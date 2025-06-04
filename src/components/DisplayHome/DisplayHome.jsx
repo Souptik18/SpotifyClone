@@ -1,5 +1,7 @@
 import React from 'react'
-import { albumsData, songsData } from '../../assets/assets'
+import albumsData from '../../api/albums.json'
+import songsData from '../../api/songs.json'
+import { assets } from '../../assets/assets'
 import AlbumItem from '../AlbumItem/AlbumItem'
 import SongItem from '../SongItem/SongItem'
 import DisplayNav from '../DisplayNav/DisplayNav'
@@ -12,13 +14,17 @@ const DisplayHome = () => {
             <div className='mb-4'>
                 <h1 className='my-5 font-bold text-2xl'>Featured Charts</h1>
                 <div className='flex overflow-auto'>
-                    {albumsData.map((item, index) => (<AlbumItem key={index} name={item.name} desc={item.desc} image={item.image} id={item.id} />))}
+                    {albumsData.map((item, index) => (
+                        <AlbumItem key={index} name={item.name} desc={item.desc} image={assets[item.image]} id={item.id} />
+                    ))}
                 </div>
             </div>
             <div className='mb-4'>
                 <h1 className='my-5 font-bold text-2xl'>Today's biggest hits</h1>
                 <div className='flex overflow-auto'>
-                    {songsData.map((item, index) => (<SongItem key={index} name={item.name} desc={item.desc} id={item.id} image={item.image} />))}
+                    {songsData.map((item, index) => (
+                        <SongItem key={index} name={item.name} desc={item.desc} id={item.id} image={assets[item.image]} />
+                    ))}
                 </div>
             </div>
         </>

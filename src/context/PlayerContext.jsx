@@ -1,5 +1,12 @@
 import { createContext, useEffect, useRef, useState } from "react";
-import { songsData } from "../assets/assets";
+import songsData from "../api/songs.json";
+import { assets } from "../assets/assets";
+
+const songs = songsData.map(item => ({
+    ...item,
+    image: assets[item.image],
+    file: assets[item.file]
+}));
 
 export const PlayerContext = createContext();
 
@@ -9,7 +16,7 @@ const PlayerContextProvider = (props) => {
     const seekBg = useRef();
     const seekBar = useRef();
     
-    const [track, setTrack] = useState(songsData[0]);
+    const [track, setTrack] = useState(songs[0]);
     const [playStatus, setPlayStatus] = useState(false)
     const [isShuffling, setIsShuffling] = useState(false);
     const [isLooping, setIsLooping] = useState(false);
@@ -52,23 +59,23 @@ const PlayerContextProvider = (props) => {
     const previous = async () => {
         if (track.id > 0) {
             if (import.meta.env.DEV) console.log("prev", track.id);
-            await setTrack(songsData[track.id - 1]);
+            await setTrack(songs[track.id - 1]);
             await audioRef.current.play();
             setPlayStatus(true);
         }
     }
 
     const next = async () => {
-        if (track.id < songsData.length - 1) {
+        if (track.id < songs.length - 1) {
             if (import.meta.env.DEV) console.log("next", track.id);
-            await setTrack(songsData[track.id + 1]);
+            await setTrack(songs[track.id + 1]);
             await audioRef.current.play();
             setPlayStatus(true);
         }
     }
 
     const playWithId = async (id) => {
-        await setTrack(songsData[id]);
+        await setTrack(songs[id]);
         await audioRef.current.play();
         setPlayStatus(true);
     }
