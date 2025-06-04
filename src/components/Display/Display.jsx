@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import DisplayHome from '../DisplayHome/DisplayHome'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import DisplayAlbum from '../DisplayAlbum/DisplayAlbum'
-import { albumsData } from '../../assets/assets'
+import albumsData from '../../api/albums.json'
 
 const Display = () => {
 
