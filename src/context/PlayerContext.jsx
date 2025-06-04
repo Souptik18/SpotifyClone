@@ -78,22 +78,28 @@ const PlayerContextProvider = (props) => {
     };
 
     useEffect(() => {
-        setTimeout(() => {
-            audioRef.current.ontimeupdate = (e) => {
-                seekBar.current.style.width = (Math.floor(audioRef.current.currentTime * 100 / audioRef.current.duration)) + "%";
-                setTime({
-                    currentTime: {
-                        second: Math.floor(audioRef.current.currentTime % 60),
-                        minute: Math.floor(audioRef.current.currentTime / 60)
-                    },
-                    totalTime: {
-                        second: Math.floor(audioRef.current.duration % 60),
-                        minute: Math.floor(audioRef.current.duration / 60)
-                    }
-                })
-            }
-        }, 1000);
-    }, [audioRef])
+        const audioEl = audioRef.current;
+        if (!audioEl) return;
+
+        const handleTimeUpdate = () => {
+            seekBar.current.style.width = (Math.floor(audioEl.currentTime * 100 / audioEl.duration)) + "%";
+            setTime({
+                currentTime: {
+                    second: Math.floor(audioEl.currentTime % 60),
+                    minute: Math.floor(audioEl.currentTime / 60)
+                },
+                totalTime: {
+                    second: Math.floor(audioEl.duration % 60),
+                    minute: Math.floor(audioEl.duration / 60)
+                }
+            })
+        };
+
+        audioEl.ontimeupdate = handleTimeUpdate;
+        return () => {
+            audioEl.ontimeupdate = null;
+        };
+    }, [])
 
     const contextValue = {
         audioRef,
