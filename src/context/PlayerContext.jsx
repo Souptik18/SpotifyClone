@@ -88,7 +88,8 @@ const PlayerContextProvider = (props) => {
         const audioEl = audioRef.current;
         if (!audioEl) return;
 
-        const handleTimeUpdate = () => {
+    const handleTimeUpdate = () => {
+            if (!Number.isFinite(audioEl.duration)) return;
             seekBar.current.style.width = (Math.floor(audioEl.currentTime * 100 / audioEl.duration)) + "%";
             setTime({
                 currentTime: {
@@ -111,6 +112,26 @@ const PlayerContextProvider = (props) => {
             audioEl.ontimeupdate = null;
         };
     }, [])
+
+    useEffect(() => {
+        const audioEl = audioRef.current;
+        if (!audioEl) return;
+        setTime({
+            currentTime: { second: 0, minute: 0 },
+            totalTime: { second: 0, minute: 0 }
+        });
+        const handleMetadata = () => {
+            setTime(prev => ({
+                ...prev,
+                totalTime: {
+                    second: Math.floor(audioEl.duration % 60),
+                    minute: Math.floor(audioEl.duration / 60)
+                }
+            }));
+        };
+        audioEl.addEventListener('loadedmetadata', handleMetadata);
+        return () => audioEl.removeEventListener('loadedmetadata', handleMetadata);
+    }, [track])
 
     const contextValue = {
         audioRef,
