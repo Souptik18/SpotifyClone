@@ -26,6 +26,14 @@ npm install
 npm run dev
 ```
 
+In another terminal, start the mock API server:
+
+```bash
+npm run server
+```
+
+`server.js` reads data from the `data/` directory and exposes album and song endpoints.
+
 ### Production Build
 
 ```bash
@@ -37,4 +45,6 @@ npm run build
 - `src/` – React components, context and assets
 - `public/` – static files served directly
 - `index.html` – main HTML entry point
+- `data/` – JSON files served by `server.js`
+- `server.js` – mock API for album and song data
 - Configuration – `vite.config.js`, `tailwind.config.js`, `postcss.config.js`
